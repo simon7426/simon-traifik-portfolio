@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  traefik:
+    image: "traefik:v3.2"
+    container_name: "traefik"
+    command:
+      # - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=false"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.myresolver.acme.email=rian66746@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  vue-portfolio:
+    image: simon7426/caddy-portfolio:0.2
+    container_name: vue-portfolio
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.vue-portfolio.rule=Host(`simonislam.com`)"
+      - "traefik.http.routers.vue-portfolio.entrypoints=websecure"
+      - "traefik.http.routers.vue-portfolio.tls.certresolver=myresolver"

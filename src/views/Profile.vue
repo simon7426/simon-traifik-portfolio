@@ -14,8 +14,8 @@ defineComponent({
 const { xs, sm, smAndDown, md, mdAndDown } = useDisplay();
 
 const profile = reactive({
-    fullName: 'Ruslan Tsiapko',
-    position: 'Full-stack Web Developer',
+    fullName: 'Simon Islam',
+    position: 'Solutions Architect',
 });
 </script>
 <template>
